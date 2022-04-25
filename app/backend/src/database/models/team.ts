@@ -1,7 +1,7 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+
+import { Model } from './index'
+
 module.exports = (sequelize: any, DataTypes: any) => {
   class Team extends Model {
     /**
@@ -11,6 +11,9 @@ module.exports = (sequelize: any, DataTypes: any) => {
      */
     static associate(models: any) {
       // define association here
+      Team.hasMany(models.Match, {
+        foreignKey: 'id', as: 'matches'
+      })
     }
   };
   Team.init({
