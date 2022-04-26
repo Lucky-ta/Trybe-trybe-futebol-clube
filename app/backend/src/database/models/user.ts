@@ -1,25 +1,31 @@
-'use strict';
-import { Model } from './index';
+import { DataTypes, Model } from 'sequelize';
+import db from './index';
 
-module.exports = (sequelize: any, DataTypes:any) => {
-  class User extends Model {
-    /**
+export default class User extends Model {
+  username: string;
+
+  role: string;
+
+  email:string;
+
+  password:string;
+
+  /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models:any) {
-      // define association here
-    }
-  };
-  User.init({
-    username: DataTypes.STRING,
-    role: DataTypes.STRING,
-    email: DataTypes.STRING,
-    password: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'User',
-  });
-  return User;
-};
+  // static associate(models:any) {
+  //   // define association here
+  // }
+}
+User.init({
+  username: DataTypes.STRING,
+  role: DataTypes.STRING,
+  email: DataTypes.STRING,
+  password: DataTypes.STRING,
+}, {
+  sequelize: db,
+  modelName: 'User',
+  tableName: 'users',
+});
