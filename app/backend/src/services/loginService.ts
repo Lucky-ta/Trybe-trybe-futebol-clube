@@ -3,22 +3,19 @@ import { readFile } from 'fs/promises';
 import User from '../database/models/user';
 import { INCORRECTINFORMATIONSERROR } from '../errors/errorsMessages';
 
-const SECRET = readFile(
-  '/home/lucas/sd-015-b-trybe-futebol-clube/app/backend/jwt.evaluation.key',
-  'utf-8',
-);
-
 export type UserCredentials = {
   email: string;
   password: string;
 };
 
 export const userLogin = async (email: string, password:string) => {
+  const SECRET = await readFile('jwt.evaluation.key', 'utf-8');
+
   const user = await User
     .findOne({ where: { email, password }, attributes: { exclude: ['password'] } });
 
   if (user !== null) {
-    const token = sign(user, await SECRET, {
+    const token = sign(user, SECRET, {
       expiresIn: '1d',
       algorithm: 'HS256',
     });
