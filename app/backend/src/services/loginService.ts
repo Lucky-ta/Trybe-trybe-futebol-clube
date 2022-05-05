@@ -1,8 +1,8 @@
 import { sign } from 'jsonwebtoken';
+import { readFileSync } from 'fs';
+import { compare } from 'bcrypt';
 import User from '../database/models/user';
 import { INCORRECTINFORMATIONSERROR } from '../errors/errorsMessages';
-import { readFileSync } from 'fs';
-import { compare } from 'bcrypt'
 
 export type UserCredentials = {
   email: string;
@@ -11,22 +11,21 @@ export type UserCredentials = {
 
 export const userLogin = async (email: string, password:string) => {
   const SECRET = readFileSync('jwt.evaluation.key', { encoding: 'utf-8' })
-  .trim();
+    .trim();
 
-  const user = await User
-    .findOne({ where: { email, password } });
+  const result = await User
+    .findOne({ where: { email } });
 
-  if (user !== null) {
-    const verifyPassword = await compare(password, user.password);
-    const { password: passDb, ...userWithouPassword } = user;
+  if (result !== null) {
+    const verifyPassword = await compare(password, result.dataValues.password);
 
     if (verifyPassword) {
-      const token = sign({userWithouPassword}, SECRET, {
+      const { password: dbPass, ...user } = result.dataValues;
+      const token = sign(user, SECRET, {
         expiresIn: '1d',
         algorithm: 'HS256',
       });
       return { status: 200, result: { user, token } };
     }
-  }
-  return { status: 401, result: { message: INCORRECTINFORMATIONSERROR } };
+  } return { status: 401, result: { message: INCORRECTINFORMATIONSERROR } };
 };

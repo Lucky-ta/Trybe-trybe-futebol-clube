@@ -1,14 +1,26 @@
 import { DataTypes, Model } from 'sequelize';
 import db from './index';
 
+type DataValues = {
+  id: number;
+  username: string;
+  role: string;
+  email: string;
+  password: string
+};
+
 export default class User extends Model {
+  dataValues: DataValues;
+
+  id: number;
+
   username: string;
 
   role: string;
 
-  email:string;
+  email: string;
 
-  password:string;
+  password: string;
 
   /**
      * Helper method for defining associations.
