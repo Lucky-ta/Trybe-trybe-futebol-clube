@@ -1,7 +1,7 @@
 import { DataTypes, Model } from 'sequelize';
 import db from './index';
 
-class Match extends Model {
+export default class Match extends Model {
   /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
