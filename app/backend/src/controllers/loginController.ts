@@ -1,8 +1,7 @@
 import { Response, Request } from 'express';
-import { userLogin } from '../services/loginService';
-import { validateLogin } from '../services/loginService';
+import { userLogin, validateLogin } from '../services/loginService';
 
-const login = async (req: Request, res: Response) => {
+export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
     const { result, status } = await userLogin(email, password);
@@ -12,14 +11,12 @@ const login = async (req: Request, res: Response) => {
   }
 };
 
-const validate = async (req: Request, res: Response) => {
+export const validate = async (req: Request, res: Response) => {
   try {
     const { authorization: token } = req.headers;
     const result = validateLogin(token || '');
-    return res.status(result.status).json(result.data)
+    return res.status(result.status).json(result.data);
   } catch (e: any) {
-    return res.status(500).json(e.message)
+    return res.status(500).json(e.message);
   }
-}
-
-export default login;
+};

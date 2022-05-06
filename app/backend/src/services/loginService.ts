@@ -9,10 +9,9 @@ export type UserCredentials = {
   password: string;
 };
 const SECRET = readFileSync('jwt.evaluation.key', { encoding: 'utf-8' })
-.trim();
+  .trim();
 
 export const userLogin = async (email: string, password:string) => {
-
   const result = await User
     .findOne({ where: { email } });
 
@@ -30,12 +29,15 @@ export const userLogin = async (email: string, password:string) => {
   } return { status: 401, result: { message: INCORRECTINFORMATIONSERROR } };
 };
 
+interface ValidateToken {
+  role: string;
+}
+
 export const validateLogin = (token: string) => {
   try {
-    const data = verify(token, SECRET);
-    return { status: 200, data }
+    const data = <ValidateToken>verify(token, SECRET);
+    return { status: 200, data: data.role };
   } catch (e: any) {
-    return { status: 404, data: e.message }
+    return { status: 404, data: e.message };
   }
-
-}
+};
