@@ -11,4 +11,6 @@ loginRouter.post(
   login,
 );
 
+loginRouter.get('/validate', )
+
 export default loginRouter;

@@ -1,5 +1,6 @@
 import { Response, Request } from 'express';
 import { userLogin } from '../services/loginService';
+import { validateLogin } from '../services/loginService';
 
 const login = async (req: Request, res: Response) => {
   try {
@@ -10,5 +11,15 @@ const login = async (req: Request, res: Response) => {
     return res.status(404).json(e.message);
   }
 };
+
+const validate = async (req: Request, res: Response) => {
+  try {
+    const { authorization: token } = req.headers;
+    const result = validateLogin(token || '');
+    return res.status(result.status).json(result.data)
+  } catch (e: any) {
+    return res.status(500).json(e.message)
+  }
+}
 
 export default login;

@@ -1,4 +1,4 @@
-import { sign } from 'jsonwebtoken';
+import { sign, verify } from 'jsonwebtoken';
 import { readFileSync } from 'fs';
 import { compare } from 'bcrypt';
 import User from '../database/models/user';
@@ -8,10 +8,10 @@ export type UserCredentials = {
   email: string;
   password: string;
 };
+const SECRET = readFileSync('jwt.evaluation.key', { encoding: 'utf-8' })
+.trim();
 
 export const userLogin = async (email: string, password:string) => {
-  const SECRET = readFileSync('jwt.evaluation.key', { encoding: 'utf-8' })
-    .trim();
 
   const result = await User
     .findOne({ where: { email } });
@@ -29,3 +29,13 @@ export const userLogin = async (email: string, password:string) => {
     }
   } return { status: 401, result: { message: INCORRECTINFORMATIONSERROR } };
 };
+
+export const validateLogin = (token: string) => {
+  try {
+    const data = verify(token, SECRET);
+    return { status: 200, data }
+  } catch (e: any) {
+    return { status: 404, data: e.message }
+  }
+
+}
