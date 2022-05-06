@@ -1,7 +1,7 @@
 import { DataTypes, Model } from 'sequelize';
 import db from './index';
 
-class Team extends Model {
+export default class Team extends Model {
   team_name: string;
 
   /**
@@ -20,6 +20,6 @@ Team.init({
   team_name: DataTypes.STRING,
 }, {
   sequelize: db,
-  tableName: 'users',
-  modelName: 'teams',
+  tableName: 'teams',
+  modelName: 'Team',
 });

@@ -20,6 +20,6 @@ Match.init({
   in_progress: DataTypes.BOOLEAN,
 }, {
   sequelize: db,
-  tableName: 'users',
-  modelName: 'matches',
+  tableName: 'matches',
+  modelName: 'Match',
 });

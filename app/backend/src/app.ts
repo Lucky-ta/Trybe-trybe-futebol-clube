@@ -1,5 +1,6 @@
 import * as express from 'express';
 import loginRouter from './routes/login';
+import teamsRouter from './routes/team';
 
 class App {
   public app: express.Express;
@@ -30,6 +31,7 @@ class App {
     this.app.use(express.json());
 
     this.app.use('/login', loginRouter);
+    this.app.use('/teams', teamsRouter);
     this.app.listen(PORT, () => {
       console.log(`Runing on port ${PORT}`);
     });
