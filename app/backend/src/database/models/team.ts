@@ -2,6 +2,8 @@ import { DataTypes, Model } from 'sequelize';
 import db from './index';
 
 export default class Team extends Model {
+  id: number ;
+
   team_name: string;
 }
 Team.init({
