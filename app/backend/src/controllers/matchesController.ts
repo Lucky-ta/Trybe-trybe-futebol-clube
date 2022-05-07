@@ -1,5 +1,5 @@
 import { Response, Request } from 'express';
-import {getAllMatches, postMatches} from '../services/matchService';
+import { getAllMatches, postMatches } from '../services/matchService';
 
 export const listMatches = async (req: Request, res: Response) => {
   try {
@@ -19,5 +19,4 @@ export const saveMatches = async (req: Request, res: Response) => {
   } catch (e: any) {
     return res.status(500).json(e.message);
   }
-}
-
+};

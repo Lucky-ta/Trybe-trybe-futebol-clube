@@ -2,12 +2,12 @@ import Team from '../database/models/team';
 import Match from '../database/models/match';
 
 type PostMatchParam = {
-    homeTeam: number;
-    awayTeam: number;
-    homeTeamGoals: number;
-    awayTeamGoals: number;
-    inProgress: boolean;
-}
+  homeTeam: number;
+  awayTeam: number;
+  homeTeamGoals: number;
+  awayTeamGoals: number;
+  inProgress: boolean;
+};
 
 const formatMatchesData = (matches: Match[]) => {
   const result = matches.map((match) => ({
@@ -25,15 +25,15 @@ const formatMatchesData = (matches: Match[]) => {
 
 const formatNewMatchData = (match: Match) => {
   const data = {
-  id: match.id,
-  homeTeam: match.home_team, 
-  awayTeam: match.away_team, 
-  homeTeamGoals: match.home_team_goals,
-  awayTeamGoals: match.away_team_goals,
-  inProgress: match.in_progress 
-  }
+    id: match.id,
+    homeTeam: match.home_team,
+    awayTeam: match.away_team,
+    homeTeamGoals: match.home_team_goals,
+    awayTeamGoals: match.away_team_goals,
+    inProgress: match.in_progress,
+  };
   return data;
-}
+};
 
 const findAllMatches = async () => {
   const result = await Match.findAll({
@@ -70,13 +70,12 @@ export const postMatches = async (match: PostMatchParam) => {
       home_team_goals: match.homeTeamGoals,
       away_team: match.awayTeam,
       away_team_goals: match.awayTeamGoals,
-      in_progress: match.inProgress
+      in_progress: match.inProgress,
     });
 
-    const data = formatNewMatchData(result)
-    return { status: 201, data }
+    const data = formatNewMatchData(result);
+    return { status: 201, data };
   } catch (e: any) {
-    return { status: 404, data: e.message }
+    return { status: 404, data: e.message };
   }
-}
-
+};
