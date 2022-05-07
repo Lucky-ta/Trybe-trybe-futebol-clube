@@ -3,21 +3,17 @@ import db from './index';
 
 export default class Team extends Model {
   team_name: string;
-
-  /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-  static associate(models: any) {
-    // define association here
-    Team.hasMany(models.Match, {
-      foreignKey: 'id', as: 'matches',
-    });
-  }
 }
 Team.init({
-  team_name: DataTypes.STRING,
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  team_name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 }, {
   sequelize: db,
   tableName: 'teams',

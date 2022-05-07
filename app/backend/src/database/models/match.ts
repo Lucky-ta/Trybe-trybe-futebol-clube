@@ -1,25 +1,61 @@
 import { DataTypes, Model } from 'sequelize';
 import db from './index';
+import Team from './team';
+
+type TeamName = {
+  team_name: string;
+};
 
 export default class Match extends Model {
-  /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-  static associate(models: any) {
-    // define association here
-    Match.belongsTo(models.Team);
-  }
+  id: number;
+
+  home_team: number;
+
+  home_team_goals: number;
+
+  away_team: number;
+
+  away_team_goals: number;
+
+  in_progress: boolean;
+
+  teamHome?: TeamName;
+
+  teamAway?: TeamName;
 }
 Match.init({
-  home_team: DataTypes.NUMBER,
-  home_team_goals: DataTypes.NUMBER,
-  away_team: DataTypes.NUMBER,
-  away_team_goals: DataTypes.NUMBER,
-  in_progress: DataTypes.BOOLEAN,
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  home_team: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  home_team_goals: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  away_team: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  away_team_goals: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  in_progress: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+  },
 }, {
   sequelize: db,
   tableName: 'matches',
-  modelName: 'Match',
+  modelName: 'matches',
 });
+
+Match.belongsTo(Team, { foreignKey: 'home_team', as: 'teamHome' });
+Match.belongsTo(Team, { foreignKey: 'away_team', as: 'teamAway' });
+
+Team.hasMany(Match, { foreignKey: 'id' });
