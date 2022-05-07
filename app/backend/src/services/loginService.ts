@@ -8,7 +8,7 @@ export type UserCredentials = {
   email: string;
   password: string;
 };
-const SECRET = readFileSync('jwt.evaluation.key', { encoding: 'utf-8' })
+export const SECRET = readFileSync('jwt.evaluation.key', { encoding: 'utf-8' })
   .trim();
 
 export const userLogin = async (email: string, password:string) => {
@@ -29,7 +29,7 @@ export const userLogin = async (email: string, password:string) => {
   } return { status: 401, result: { message: INCORRECTINFORMATIONSERROR } };
 };
 
-interface ValidateToken {
+export interface ValidateToken {
   role: string;
 }
 

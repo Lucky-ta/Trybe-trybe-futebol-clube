@@ -1,7 +1,7 @@
 import { Response, Request } from 'express';
-import getAllMatches from '../services/matchService';
+import {getAllMatches, postMatches} from '../services/matchService';
 
-const listMatches = async (req: Request, res: Response) => {
+export const listMatches = async (req: Request, res: Response) => {
   try {
     const { inProgress } = req.query;
     const result = await getAllMatches(inProgress);
@@ -10,4 +10,14 @@ const listMatches = async (req: Request, res: Response) => {
     return res.status(500).json(e.message);
   }
 };
-export default listMatches;
+
+export const saveMatches = async (req: Request, res: Response) => {
+  try {
+    const match = req.body;
+    const result = await postMatches(match);
+    return res.status(result.status).json(result.data);
+  } catch (e: any) {
+    return res.status(500).json(e.message);
+  }
+}
+

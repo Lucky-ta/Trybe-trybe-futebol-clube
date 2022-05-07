@@ -1,6 +1,14 @@
 import Team from '../database/models/team';
 import Match from '../database/models/match';
 
+type PostMatchParam = {
+    homeTeam: number;
+    awayTeam: number;
+    homeTeamGoals: number;
+    awayTeamGoals: number;
+    inProgress: boolean;
+}
+
 const formatMatchesData = (matches: Match[]) => {
   const result = matches.map((match) => ({
     id: match.id,
@@ -15,6 +23,18 @@ const formatMatchesData = (matches: Match[]) => {
   return result;
 };
 
+const formatNewMatchData = (match: Match) => {
+  const data = {
+  id: match.id,
+  homeTeam: match.home_team, 
+  awayTeam: match.away_team, 
+  homeTeamGoals: match.home_team_goals,
+  awayTeamGoals: match.away_team_goals,
+  inProgress: match.in_progress 
+  }
+  return data;
+}
+
 const findAllMatches = async () => {
   const result = await Match.findAll({
     include: [
@@ -27,7 +47,7 @@ const findAllMatches = async () => {
   return { status: 200, data };
 };
 
-const getAllMatches = async (progress: any) => {
+export const getAllMatches = async (progress: any) => {
   if (progress !== undefined) {
     const parsedProgress = JSON.parse(progress);
     const result = await Match.findAll({ where: { in_progress: parsedProgress },
@@ -43,4 +63,20 @@ const getAllMatches = async (progress: any) => {
   return findAllMatches();
 };
 
-export default getAllMatches;
+export const postMatches = async (match: PostMatchParam) => {
+  try {
+    const result = await Match.create({
+      home_team: match.homeTeam,
+      home_team_goals: match.homeTeamGoals,
+      away_team: match.awayTeam,
+      away_team_goals: match.awayTeamGoals,
+      in_progress: match.inProgress
+    });
+
+    const data = formatNewMatchData(result)
+    return { status: 201, data }
+  } catch (e: any) {
+    return { status: 404, data: e.message }
+  }
+}
+
