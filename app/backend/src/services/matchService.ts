@@ -87,11 +87,11 @@ export const postMatches = async (match: PostMatchParam) => {
 
 export const updateMatchStatus = async (id: number) => {
   try {
-    await Match.update(
+    const data = await Match.update(
       { in_progress: false },
       { where: { id } },
     );
-    return { status: 200 };
+    return { status: 200, data };
   } catch (e: any) {
     return { status: 401, data: e.message };
   }
