@@ -1,7 +1,7 @@
 import Team from '../database/models/team';
 import Match from '../database/models/match';
 
-type PostMatchParam = {
+export type PostMatchParam = {
   homeTeam: number;
   awayTeam: number;
   homeTeamGoals: number;
@@ -65,6 +65,11 @@ export const getAllMatches = async (progress: any) => {
 
 export const postMatches = async (match: PostMatchParam) => {
   try {
+    const homeTeam = await Team.findByPk(match.homeTeam);
+    const awayTeam = await Team.findByPk(match.awayTeam);
+    if (homeTeam === null || awayTeam === null) {
+      return { status: 404, data: { message: 'There is no team with such id!' } };
+    }
     const result = await Match.create({
       home_team: match.homeTeam,
       home_team_goals: match.homeTeamGoals,
@@ -75,6 +80,18 @@ export const postMatches = async (match: PostMatchParam) => {
 
     const data = formatNewMatchData(result);
     return { status: 201, data };
+  } catch (e: any) {
+    return { status: 404, data: e.message };
+  }
+};
+
+export const updateMatchStatus = async (id: number) => {
+  try {
+    const data = await Match.update(
+      { in_progress: false },
+      { where: { id } },
+    );
+    return { status: 202, data };
   } catch (e: any) {
     return { status: 404, data: e.message };
   }
