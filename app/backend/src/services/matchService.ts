@@ -79,7 +79,7 @@ export const postMatches = async (match: PostMatchParam) => {
     });
 
     const data = formatNewMatchData(result);
-    return { status: 200, data };
+    return { status: 201, data };
   } catch (e: any) {
     return { status: 404, data: e.message };
   }
@@ -87,11 +87,11 @@ export const postMatches = async (match: PostMatchParam) => {
 
 export const updateMatchStatus = async (id: number) => {
   try {
-    const data = await Match.update(
+    await Match.update(
       { in_progress: false },
       { where: { id } },
     );
-    return { status: 200, data };
+    return { status: 200 };
   } catch (e: any) {
     return { status: 401, data: e.message };
   }
