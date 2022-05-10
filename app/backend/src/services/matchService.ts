@@ -100,17 +100,17 @@ export const updateMatchStatus = async (id: number) => {
 type UpdateMatchParams = {
   homeTeamGoals: number;
   awayTeamGoals: number
-}
+};
 
-export const updateMatch = async(id: number, body: UpdateMatchParams) => {
+export const updateMatch = async (id: number, body: UpdateMatchParams) => {
   try {
     const data = await Match.update(
-      {home_team_goals: body.homeTeamGoals,
-      away_team_goals: body.awayTeamGoals},
-      {where: { id }}
+      { home_team_goals: body.homeTeamGoals,
+        away_team_goals: body.awayTeamGoals },
+      { where: { id } },
     );
-    return { status: 200, data }
+    return { status: 200, data };
   } catch (e: any) {
-    return { status: 200, data: e.message }
+    return { status: 200, data: e.message };
   }
-}
+};
