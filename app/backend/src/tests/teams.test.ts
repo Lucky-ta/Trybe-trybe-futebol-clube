@@ -23,4 +23,23 @@ describe('GET /teams',() => {
         .get('/teams/2')
         expect(response.status).to.be.equal(200)
     })
+
+    it('Retorna status 200 na rota /teams/:id',async() => {
+        const expectBody = { id: 2, teamName: 'Bahia' }
+        response = await chai.request(app)
+        .get('/teams/2')        
+        expect(response.body).to.be.include(expectBody)
+    })
+
+    it('Retorna status 200 na rota /teams/:id',async() => {
+        response = await chai.request(app)
+        .get('/teams/2')
+        expect(response.status).to.be.equal(200)
+    })
+    it('rota teams retorna erro e retorna status 404', async() => {
+        response = await chai.request(app)
+          .get('/teams/5400')
+        expect(response.status).to.be.equal(500);
+ 
+      });
 })
