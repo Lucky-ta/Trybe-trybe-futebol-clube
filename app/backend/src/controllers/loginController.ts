@@ -7,7 +7,7 @@ export const login = async (req: Request, res: Response) => {
     const { result, status } = await userLogin(email, password);
     return res.status(status).json(result.message || result);
   } catch (e: any) {
-    return res.status(404).json(e.message);
+    return res.status(404).json(e.result);
   }
 };
 
