@@ -132,14 +132,12 @@ const resultArray = async () => {
     const totalGames = await calculateTotalGames(team.teamName);
     const totalPoints = await calculateTotalPoints(team.teamName);
     const efficiency = ((totalPoints / (totalGames * 3)) * 100).toFixed(2);
-    const totalVictories = await victories(team.teamName);
-    const totalDraws = await draws(team.teamName);
 
     const functions = { totalGames,
       totalPoints,
       efficiency,
-      totalVictories,
-      totalDraws,
+      totalVictories: await victories(team.teamName),
+      totalDraws: await draws(team.teamName),
       totalLosses: await losses(team.teamName),
       totalGoalsFavor: await goalsFavor(team.teamName),
       totalGoalsOwn: await goalsOwn(team.teamName) };
@@ -149,10 +147,31 @@ const resultArray = async () => {
   return Promise.all(result);
 };
 
-const filterLeaderboard = async () => {
-  const data = await resultArray();
+function compare(a: any, b: any) {
+  if (a.totalPoints < b.totalPoints) {
+    return 1;
+  }
+  if (a.totalPoints > b.totalPoints) {
+    return -1;
+  }
+  return 0;
+}
 
-  return { status: 200, data };
+function secondCompare(a: any, b: any) {
+  if (a.totalPoints !== b.totalPoints) return b.totalPoints - a.totalPoints;
+  if (a.totalVictories !== b.totalVictories) return b.totalVictories - a.totalVictories;
+  if (a.goalsBalance !== b.goalsBalance) return b.goalsBalance - a.goalsBalance;
+  if (a.goalsFavor !== b.goalsFavor) return b.goalsFavor - a.goalsFavor;
+  return b.goalsOwn - a.goalsOwn;
+}
+
+const filterLeaderboard = async () => {
+  const data = await <any>resultArray();
+
+  const sortedData = data.sort(compare)
+    .sort(secondCompare);
+
+  return { status: 200, data: sortedData };
 };
 
 export default filterLeaderboard;
