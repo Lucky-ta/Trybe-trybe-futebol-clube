@@ -20,8 +20,8 @@ const calculateTotalGames = async (teamName: string) => {
   const { data } = await <any>getAllMatches(false);
   const homeResult = data.filter((match: TeamsVictory) => match.teamHome.teamName === teamName);
 
-  const awayResult = data.filter((match: TeamsVictory) => match.teamAway.teamName === teamName);
-  return homeResult.length + awayResult.length;
+  // const awayResult = data.filter((match: TeamsVictory) => match.teamAway.teamName === teamName);
+  return homeResult.length;
 };
 
 const calculateTotalPoints = async (teamName: string) => {
@@ -31,14 +31,11 @@ const calculateTotalPoints = async (teamName: string) => {
     .homeTeamGoals > match.awayTeamGoals
         && match.teamHome.teamName === teamName);
 
-  const awayTeamPoints = data.filter((match: TeamsVictory) => match
-    .homeTeamGoals < match.awayTeamGoals
-        && match.teamAway.teamName === teamName);
-
   const drawPoints = data.filter((match: TeamsVictory) => (match
     .homeTeamGoals === match.awayTeamGoals)
-        && ((match.teamHome.teamName === teamName) || (match.teamAway.teamName === teamName)));
-  const result = (homeTeamPoints.length * 3) + (awayTeamPoints.length * 3) + (drawPoints.length);
+        && ((match.teamHome.teamName === teamName)));
+
+  const result = (homeTeamPoints.length * 3) + (drawPoints.length);
   return result;
 };
 
@@ -49,17 +46,17 @@ const victories = async (teamName: string) => {
     .homeTeamGoals > match.awayTeamGoals)
         && (match.teamHome.teamName === teamName));
 
-  const awayTeamVictory = data.filter((match: TeamsVictory) => (match
-    .homeTeamGoals < match.awayTeamGoals)
-        && (match.teamAway.teamName === teamName));
-  return homeTeamVictory.length + awayTeamVictory.length;
+  // const awayTeamVictory = data.filter((match: TeamsVictory) => (match
+  //   .homeTeamGoals < match.awayTeamGoals)
+  //       && (match.teamAway.teamName === teamName));
+  return homeTeamVictory.length;
 };
 
 const draws = async (teamName: string) => {
   const { data } = await <any>getAllMatches(false);
 
   const draw = data.filter((match: TeamsVictory) => (match.homeTeamGoals === match.awayTeamGoals)
-        && ((match.teamHome.teamName === teamName) || (match.teamAway.teamName === teamName)));
+        && ((match.teamHome.teamName === teamName)));
   return draw.length;
 };
 
@@ -70,46 +67,45 @@ const losses = async (teamName: string) => {
     .homeTeamGoals < match.awayTeamGoals
         && (match.teamHome.teamName === teamName));
 
-  const awayTeamVictory = data.filter((match: TeamsVictory) => match
-    .homeTeamGoals > match.awayTeamGoals
-        && (match.teamAway.teamName === teamName));
-  return homeTeamVictory.length + awayTeamVictory.length;
+  // const awayTeamVictory = data.filter((match: TeamsVictory) => match
+  //   .homeTeamGoals > match.awayTeamGoals
+  //       && (match.teamAway.teamName === teamName));
+  return homeTeamVictory.length;
 };
 
 const goalsFavor = async (teamName: string) => {
   let homeGoals = 0;
-  let awayGoals = 0;
+  // let awayGoals = 0;
   const { data } = await <any>getAllMatches(false);
 
   const favorTeamsGoals = data.filter((match: TeamsVictory) => match
     .teamHome.teamName === teamName);
-  const favorAwayTeamsGoals = data.filter((match: TeamsVictory) => match
-    .teamAway.teamName === teamName);
+  // const favorAwayTeamsGoals = data.filter((match: TeamsVictory) => match
+  //   .teamAway.teamName === teamName);
   favorTeamsGoals.forEach((team: any) => {
     homeGoals += team.homeTeamGoals;
   });
-  favorAwayTeamsGoals.forEach((team: any) => {
-    awayGoals += team.awayTeamGoals;
-  });
-  return homeGoals + awayGoals;
+  // favorAwayTeamsGoals.forEach((team: any) => {
+  //   awayGoals += team.awayTeamGoals;
+  // });
+  return homeGoals;
 };
 
 const goalsOwn = async (teamName: string) => {
   let homeGoals = 0;
-  let awayGoals = 0;
+  // let awayGoals = 0;
   const { data } = await <any>getAllMatches(false);
 
   const favorTeamsGoals = data.filter((match: TeamsVictory) => match
     .teamHome.teamName === teamName);
-  const favorAwayTeamsGoals = data.filter((match: TeamsVictory) => match
-    .teamAway.teamName === teamName);
+
   favorTeamsGoals.forEach((team: any) => {
     homeGoals += team.awayTeamGoals;
   });
-  favorAwayTeamsGoals.forEach((team: any) => {
-    awayGoals += team.homeTeamGoals;
-  });
-  return homeGoals + awayGoals;
+  // favorAwayTeamsGoals.forEach((team: any) => {
+  //   awayGoals += team.homeTeamGoals;
+  // });
+  return homeGoals;
 };
 
 const formatData = (name: string, functions: any) => ({
@@ -121,7 +117,7 @@ const formatData = (name: string, functions: any) => ({
   totalLosses: functions.totalLosses,
   goalsFavor: functions.totalGoalsFavor,
   goalsOwn: functions.totalGoalsOwn,
-  goalsBalance: functions.totalGoalsFavor + functions.totalGoalsOwn,
+  goalsBalance: functions.totalGoalsFavor - functions.totalGoalsOwn,
   efficiency: Number(functions.efficiency),
 });
 
