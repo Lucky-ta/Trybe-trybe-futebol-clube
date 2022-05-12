@@ -134,13 +134,17 @@ const resultArray = async () => {
     const efficiency = ((totalPoints / (totalGames * 3)) * 100).toFixed(2);
     const totalVictories = await victories(team.teamName);
     const totalDraws = await draws(team.teamName);
-    const totalLosses = await losses(team.teamName);
-    const totalGoalsFavor = await goalsFavor(team.teamName);
-    const totalGoalsOwn = await goalsOwn(team.teamName);
-    const functions = {totalGames, totalPoints, efficiency, totalVictories, totalDraws,
-      totalLosses, totalGoalsFavor, totalGoalsOwn};
 
-    return await formatData(team.teamName, functions);
+    const functions = { totalGames,
+      totalPoints,
+      efficiency,
+      totalVictories,
+      totalDraws,
+      totalLosses: await losses(team.teamName),
+      totalGoalsFavor: await goalsFavor(team.teamName),
+      totalGoalsOwn: await goalsOwn(team.teamName) };
+
+    return formatData(team.teamName, functions);
   });
   return Promise.all(result);
 };
