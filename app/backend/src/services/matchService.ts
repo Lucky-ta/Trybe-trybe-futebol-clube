@@ -2,6 +2,7 @@ import Team from '../database/models/team';
 import Match from '../database/models/match';
 
 export type PostMatchParam = {
+  id?: number;
   homeTeam: number;
   awayTeam: number;
   homeTeamGoals: number;
